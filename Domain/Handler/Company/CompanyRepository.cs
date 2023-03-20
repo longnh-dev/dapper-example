@@ -64,12 +64,12 @@ namespace DapperExample.Handler
             }
         }
 
-        public async Task<Company> GetById(Guid id)
+        public async Task<Company> GetById(int id)
         {
             try
             {
                 var connection = _context.CreateConnection();
-                return connection.Query<Company>("", new { Id = id }).FirstOrDefault();
+                return connection.Query<Company>("SELECT * FROM Company WHERE Id = @Id", new { Id = id }).FirstOrDefault();
             }
             catch(Exception ex)
             {
@@ -78,7 +78,7 @@ namespace DapperExample.Handler
         }
 
 
-        public Task<Response> UpdateAsync(Company obj)
+        public Task<Response> UpdateAsync(CompanyUpdateModel model)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using DapperExample.Handler;
+﻿using DapperExample.Entity;
+using DapperExample.Handler;
 using DapperExample.Sharedkernel;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -39,6 +40,15 @@ namespace DapperExample.Controllers
 
             var companies = await _companyRepo.Create(model);
             return new Response(HttpStatusCode.OK, "Created");
+
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Response> GetDetail(int id)
+        {
+
+            var companies = await _companyRepo.GetById(id);
+            return new Response<Company>(HttpStatusCode.OK, companies);
 
         }
     }
