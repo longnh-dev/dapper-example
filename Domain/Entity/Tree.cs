@@ -7,7 +7,8 @@ namespace DapperExample.Entity
         [Key]
         public Guid Id { get; set; }
         public string?  Name { get; set; }
-        public int  Level{ get; set; }
-        public Guid  ParentId{ get; set; }
+        public int Level{ get; set; }
+        public Guid ParentId{ get; set; }
+        public Guid NextId{ get; set; }
     }
 }

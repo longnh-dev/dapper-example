@@ -78,9 +78,22 @@ namespace DapperExample.Handler
         }
 
 
-        public Task<Response> UpdateAsync(CompanyUpdateModel model)
+        public Task<Response> UpdateAsync(CompanyUpdateModel model, int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection = _context.CreateConnection())
+                {
+                    var company = connection.Execute("UPDATE Company SET Name=@name, Address=@address, Country=@country WHERE Id=@id",
+                        param: new {});
+
+                    return new Response(HttpStatusCode.OK, "");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace DapperExample.Infracstructure.Repository
         Task<T> GetById(int id);
         Task<IEnumerable<T>> GetAllAsync();
         Task<Response> Create(Z obj);
-        Task<Response> UpdateAsync(Y obj);
-        Task<Response> DeleteAsync(Guid id);
+        Task<Response> UpdateAsync(Y obj, int id);
+        Task<Response> DeleteAsync(int id);
     }
 }
