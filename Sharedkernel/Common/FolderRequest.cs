@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entity
+namespace Sharedkernel.Common
 {
-    public class Folder
+    public class MoveFolderRequest
     {
+
+    }
+    public class AddFolderRequest
+    {
+
     }
 }
