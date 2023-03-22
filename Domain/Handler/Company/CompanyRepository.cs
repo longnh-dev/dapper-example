@@ -1,8 +1,10 @@
 ﻿
 using Dapper;
 using DapperExample.Entity;
+using DapperExample.Infracstructure.Repository;
 using DapperExample.Sharedkernel;
 using Infracstructure.Context;
+using Serilog;
 using System.Linq;
 using System.Net;
 
@@ -49,7 +51,7 @@ namespace DapperExample.Handler
             }
         }
 
-        public Task<Response> DeleteAsync(Guid id)
+        public Task<Response> DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -64,21 +66,31 @@ namespace DapperExample.Handler
             }
         }
 
-        public async Task<Company> GetById(int id)
+        public async Task<Response> GetById(int id)
         {
             try
             {
-                var connection = _context.CreateConnection();
-                return connection.Query<Company>("SELECT * FROM Company WHERE Id = @Id", new { Id = id }).FirstOrDefault();
+                using (var connection = _context.CreateConnection())
+                {
+                    var company = connection.Query<Company>("SELECT * FROM Company WHERE Id = @Id", new { Id = id }).FirstOrDefault();
+
+                    if (company == null)
+                        return new Response(HttpStatusCode.BadRequest, "Bản ghi không tồn tại");
+
+                    return new Response<Company>(HttpStatusCode.OK, company, "Lấy bản ghi thành công!");
+                }
+
             }
             catch(Exception ex)
             {
-                throw new NotImplementedException();
+                Log.Error(ex, string.Empty);
+                Log.Information("Params: Id: {@id}",  id);
+                return new Response(HttpStatusCode.InternalServerError, "Đã xảy ra lỗi trong quá trình xử lý");
             }
         }
 
 
-        public Task<Response> UpdateAsync(CompanyUpdateModel model, int id)
+        public async Task<Response> UpdateAsync(CompanyUpdateModel model, int id)
         {
             try
             {
@@ -87,13 +99,17 @@ namespace DapperExample.Handler
                     var company = connection.Execute("UPDATE Company SET Name=@name, Address=@address, Country=@country WHERE Id=@id",
                         param: new {});
 
-                    return new Response(HttpStatusCode.OK, "");
+                    return new Response(HttpStatusCode.OK,"Update success!");
                 }
             }
             catch(Exception ex)
             {
-                throw new NotImplementedException();
+                Log.Error(ex, string.Empty);
+                Log.Information("Params: Model: {@model}, Id: {@id}", model, id);
+                return new Response(HttpStatusCode.InternalServerError, "Đã xảy ra lỗi trong quá trình xử lý");
             }
         }
+
+        
     }
 }

@@ -2,6 +2,7 @@
 using DapperExample.Handler;
 using DapperExample.Sharedkernel;
 using Microsoft.AspNetCore.Mvc;
+using Sharedkernel.Helper;
 using System.Net;
 
 namespace DapperExample.Controllers
@@ -19,36 +20,26 @@ namespace DapperExample.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCompanies()
         {
-            try
-            {
                 var companies = await _companyRepo.GetAllAsync();
                 return Ok(companies);
-            }
-            catch (Exception ex)
-            {
-                //log error
-                return StatusCode(500, ex.Message);
-            }
-
-
-
+            
         }
 
         [HttpPost]
-        public async Task<Response> Create(CompanyCreateModel model)
+        public async Task<IActionResult> Create(CompanyCreateModel model)
         {
 
             var companies = await _companyRepo.Create(model);
-            return new Response(HttpStatusCode.OK, "Created");
+            return Helper.TransformData(companies);
 
         }
 
         [HttpGet("{id}")]
-        public async Task<Response> GetDetail(int id)
+        public async Task<IActionResult> GetDetail(int id)
         {
 
-            var companies = await _companyRepo.GetById(id);
-            return new Response<Company>(HttpStatusCode.OK, companies);
+            var result = await _companyRepo.GetById(id);
+            return Helper.TransformData(result);
 
         }
     }
