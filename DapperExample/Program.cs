@@ -1,4 +1,5 @@
 using DapperExample.Handler;
+using Domain.Handler;
 using Infracstructure.Context;
 using System.Net;
 
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

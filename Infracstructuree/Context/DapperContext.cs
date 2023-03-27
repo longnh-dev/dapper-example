@@ -15,5 +15,23 @@ namespace Infracstructure.Context
         }
         public IDbConnection CreateConnection()
             => new SqlConnection(_connectionString);
+
+        private static readonly object lockObject = new Object();
+        private static IDbConnection uniqueInstance;
+
+        public IDbConnection GetConnectionInstance()
+        {
+            if(uniqueInstance == null)
+            {
+                lock (lockObject)
+                {
+                    if(uniqueInstance == null)
+                    {
+                        uniqueInstance = new SqlConnection(_connectionString);
+                    }
+                }
+            }
+            return uniqueInstance;
+        }
     }
 }

@@ -28,7 +28,6 @@ namespace DapperExample.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CompanyCreateModel model)
         {
-
             var companies = await _companyRepo.Create(model);
             return Helper.TransformData(companies);
 
